@@ -1,4 +1,4 @@
-module.exports = function(app, logger, User, Item,jwt) {
+module.exports = function(app, logger, User, Item,jwt,config) {
 	app.post('/search', function(req, res) {		
 		logger.verbose(req.body);
 		var token = req.cookies.jwt;

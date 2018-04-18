@@ -2,6 +2,7 @@
 const winston = require('winston');
 
 require('winston-syslog').Syslog;
+var config = require('./config');
 
 const logger = winston.createLogger({
     level: 'info',
@@ -100,7 +101,7 @@ app.use(bodyParser.urlencoded({ extended:true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-require('./app/routes')(app, time_uuid, asyncLoop, logger, User, Item, mongoose, memcached,verifyToken,jwt);
+require('./app/routes')(app, time_uuid, asyncLoop, logger, User, Item, mongoose, memcached,verifyToken,jwt,config);
 app.listen(port, () => {
 	logger.info('Started tweet MS');
 	//console.log("Running on port " + port);
