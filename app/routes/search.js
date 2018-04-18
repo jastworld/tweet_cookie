@@ -15,7 +15,6 @@ module.exports = function(app, logger, User, Item,jwt,config) {
 		var username = req.body.username;
         	var q = req.body.q;
 		var following = req.body.following;
-		var currUser = req.body.currUser;
 		var rank = req.body.rank;
 		var parent = req.body.parent;
 		var replies = req.body.replies;
