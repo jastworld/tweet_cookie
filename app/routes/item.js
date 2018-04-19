@@ -1,6 +1,5 @@
 module.exports = function(app, logger, Item, memcached) {
 	app.get('/item/:itemId', function(req, res,next) {
-		console.log(">>>>>>>>>>>>>>>"+req.params.itemId);
 		var itemID = req.params.itemId;
 		memcached.get(itemID, function (err, cached_item) {
 			if (err) {
