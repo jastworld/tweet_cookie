@@ -84,7 +84,7 @@ module.exports = function(app, logger, User, Item,jwt,config) {
 				var sort = { "timestamp": "desc"};
 
 			if (filter && must)
-                var query = {"query": {"bool" : {"filter": filter, "must": must}}};//, "size": limit}; 
+                var query = {"query": {"bool" : {"filter": filter, "must": must}}, "size": limit}; 
             else if (filter && !must)
                 var query = {"query": {"bool" : {"filter": filter}}, "sort": sort, "size": limit};
             else if (!filter && must)
