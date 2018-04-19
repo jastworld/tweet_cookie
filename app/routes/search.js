@@ -120,9 +120,7 @@ module.exports = function(app, logger, User, Item,jwt,config) {
 							logger.error(err);
 							return res.json({status: "ERROR", error: err});
 						} else {
-							console.log(results)
 							var newArray = results.hits.hits.map(function(hit) {
-								//console.log(hit);
 								return {
 									id: hit._id,
 									username: hit._source.username,
