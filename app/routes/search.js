@@ -1,4 +1,4 @@
-module.exports = function(app, logger, User, Item,jwt,config) {
+Ymodule.exports = function(app, logger, User, Item,jwt,config) {
 	app.post('/search', function(req, res) {		
 		logger.verbose(req.body);
 		var token = req.cookies.jwt;
@@ -46,14 +46,15 @@ module.exports = function(app, logger, User, Item,jwt,config) {
 			must_json.push({"exists": {"field": "media"}});
 			//must_json.push({"term": {"hasMedia": true}});
 		
-		//console.log(must_json);
 		if (following == null || following == true) {
 			User.findById(currUser,(err,result)=>{	
+				
 				if(err) {
 					logger.error(err);
 					return res.json({status: "ERROR", error: err})
 				} else if(result == null || result.following.length == 0) {
 					//console.log("No results");
+					console.log("why here?");
 					return res.json({ status: "OK", items: [] });
 				} else {
 					//console.log(result);
@@ -66,7 +67,6 @@ module.exports = function(app, logger, User, Item,jwt,config) {
 		};
 			
 		function search(must_json, limit, rank, replies) {
-			//console.log(must_json);
 			if (replies == false)
 				var must_not = {"exists": { "field": "parent"}};
 			if (must_json.length != 0 && must_not)
@@ -84,13 +84,13 @@ module.exports = function(app, logger, User, Item,jwt,config) {
 				var sort = { "timestamp": "desc"};
 
 			if (filter && must)
-                var query = {"query": {"bool" : {"filter": filter, "must": must}}, "size": limit}; 
+                var query = {"query": {"bool" : {"filter": filter, "must": must}}};//, "size": limit}; 
             else if (filter && !must)
-                var query = {"query": {"bool" : {"filter": filter}}, "sort": sort, "size": limit};
+                var query = {"query": {"bool" : {"filter": filter}}, "sort": sort};//, "size": limit};
             else if (!filter && must)
-                var query = {"query": {"bool" : {"must": must}}, "size": limit};
+                var query = {"query": {"bool" : {"must": must}}};//, "size": limit};
             else
-                var query = {"query" : {"match_all": {}}, "sort": sort, "size": limit};
+                var query = {"query" : {"match_all": {}}, "sort": sort};//, "size": limit};
 
 			/*
 			if (filter && must && must_not)
@@ -109,8 +109,9 @@ module.exports = function(app, logger, User, Item,jwt,config) {
 				var query = {"query": {"bool" : {"must_not": must_not}},"sort": sort, "size": limit};
 			else
 				var query = {"sort": sort, "size": limit};
-			*///console.log(must_json);
-			//console.log(query);
+			*///
+			//console.log("LAST MUST JSON >>> "+JSON.stringify(must_json));
+			console.log("QUERY "+JSON.stringify(query, null, 4));
 			Item
 				.esRefresh()
 				.then(function () {
@@ -119,7 +120,9 @@ module.exports = function(app, logger, User, Item,jwt,config) {
 							logger.error(err);
 							return res.json({status: "ERROR", error: err});
 						} else {
+							console.log(results)
 							var newArray = results.hits.hits.map(function(hit) {
+								//console.log(hit);
 								return {
 									id: hit._id,
 									username: hit._source.username,
