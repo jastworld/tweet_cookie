@@ -1,4 +1,4 @@
-Ymodule.exports = function(app, logger, User, Item,jwt,config) {
+module.exports = function(app, logger, User, Item,jwt,config) {
 	app.post('/search', function(req, res) {		
 		logger.verbose(req.body);
 		var token = req.cookies.jwt;
@@ -13,7 +13,7 @@ Ymodule.exports = function(app, logger, User, Item,jwt,config) {
 		var timestamp = req.body.timestamp;
 		var limit = req.body.limit;
 		var username = req.body.username;
-        	var q = req.body.q;
+		var q = req.body.q;
 		var following = req.body.following;
 		var rank = req.body.rank;
 		var parent = req.body.parent;
@@ -86,11 +86,11 @@ Ymodule.exports = function(app, logger, User, Item,jwt,config) {
 			if (filter && must)
                 var query = {"query": {"bool" : {"filter": filter, "must": must}}};//, "size": limit}; 
             else if (filter && !must)
-                var query = {"query": {"bool" : {"filter": filter}}, "sort": sort};//, "size": limit};
+                var query = {"query": {"bool" : {"filter": filter}}, "sort": sort, "size": limit};
             else if (!filter && must)
-                var query = {"query": {"bool" : {"must": must}}};//, "size": limit};
+                var query = {"query": {"bool" : {"must": must}}, "size": limit};
             else
-                var query = {"query" : {"match_all": {}}, "sort": sort};//, "size": limit};
+                var query = {"query" : {"match_all": {}}, "sort": sort, "size": limit};
 
 			/*
 			if (filter && must && must_not)
@@ -111,7 +111,7 @@ Ymodule.exports = function(app, logger, User, Item,jwt,config) {
 				var query = {"sort": sort, "size": limit};
 			*///
 			//console.log("LAST MUST JSON >>> "+JSON.stringify(must_json));
-			console.log("QUERY "+JSON.stringify(query, null, 4));
+//			console.log("QUERY "+JSON.stringify(query, null, 4));
 			Item
 				.esRefresh()
 				.then(function () {
