@@ -1,4 +1,4 @@
-module.exports = function(app, logger, User, Item,jwt,config) {
+Ymodule.exports = function(app, logger, User, Item,jwt,config) {
 	app.post('/search', function(req, res) {		
 		logger.verbose(req.body);
 		var token = req.cookies.jwt;
@@ -19,7 +19,6 @@ module.exports = function(app, logger, User, Item,jwt,config) {
 		var parent = req.body.parent;
 		var replies = req.body.replies;
 		var hasMedia = req.body.hasMedia;
-		console.log("Curr User "+currUser)
 		//console.log(currUser);
 		//console.log(typeof(currUser));
 		var must_json = [];
@@ -113,20 +112,6 @@ module.exports = function(app, logger, User, Item,jwt,config) {
 			*///
 			//console.log("LAST MUST JSON >>> "+JSON.stringify(must_json));
 			console.log("QUERY "+JSON.stringify(query, null, 4));
-			var querwy = {
-				"query": {
-					'bool': {
-						'must': { 
-							'match_phrase': {
-								'content':q
-							}
-						}
-						
-					}
-				},
-				"_source": ["content", "username"],
-				"size": limit
-			}; 
 			Item
 				.esRefresh()
 				.then(function () {
@@ -137,7 +122,7 @@ module.exports = function(app, logger, User, Item,jwt,config) {
 						} else {
 							console.log(results)
 							var newArray = results.hits.hits.map(function(hit) {
-								console.log(hit);
+								//console.log(hit);
 								return {
 									id: hit._id,
 									username: hit._source.username,
