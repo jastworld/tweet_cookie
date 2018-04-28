@@ -39,7 +39,7 @@ const User = require('./models/User');
 const ItemSchema = require("./models/Item");
 
 ItemSchema.plugin(mexp, {
-    host:"130.245.168.77",
+    host:"192.168.1.21",
 	index: "items",
     port: 9200
 });
