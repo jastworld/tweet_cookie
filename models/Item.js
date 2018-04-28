@@ -53,6 +53,8 @@ var ItemSchema = new Schema({
 ItemSchema.methods.toClient = function() {
 	var obj = this.toObject();
     //Rename fields
+	obj.property = {likes: obj.likes}
+	delete obj.likes
     obj.id = obj._id;
     delete obj._id;
     return obj;
