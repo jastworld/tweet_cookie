@@ -20,23 +20,17 @@ module.exports = function(app, time_uuid, logger, Item, mongoose, memcached,veri
 				logger.error(err);
 				return res.json({ status: "ERROR", error: err });
 			} else {
-				//logger.info("sent response for" + ID);
-				//console.log("sent response for" + ID);
 				res.json({ status: "OK", id: ID});
 			};
 		});
 		item.save(function(err) {
 			if (err) {
 				logger.error(err);
-				return res.json({status: "ERROR", error: err});	
 			} else {
 				item.on('es-indexed', function(err,res) {
 					if (err)
 						logger.error(err);
-					//logger.info("indexed" + ID);
-					//console.log("indexed" + ID);
 				});
-				//return res.json({ status: "OK", id: ID});
 			}
 		});
 		//not synchronous
@@ -44,11 +38,8 @@ module.exports = function(app, time_uuid, logger, Item, mongoose, memcached,veri
 		if (req.body.parent != null && req.body.childType == "retweet") {
 			Item.findByIdAndUpdate(req.body.parent, { $inc: { retweeted: 1 }}, {new: true}, function (err, item) {
 				if (err) {
-					logger.error(err.errmsg);
-					//return res.json({ status: "ERROR", error: err.errmsg });
-				} else {
-					//return res.json({ status: "OK"});
-				};
+					logger.error(err);
+				}
 			});			
 		};
 		
@@ -59,8 +50,6 @@ module.exports = function(app, time_uuid, logger, Item, mongoose, memcached,veri
 				request(new_host, function (err, response) {
 					if (err) {
 						logger.error(err);
-						if (err.code === 'ECONNREFUSED') err = "MS refused connections";
-						//return res.json({ status: "ERROR", error: err });
 					}
 					else
 						logger.info(response);
