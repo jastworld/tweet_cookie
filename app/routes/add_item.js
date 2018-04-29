@@ -55,12 +55,12 @@ module.exports = function(app, time_uuid, logger, Item, mongoose, memcached,veri
 		if (req.body.media != null) {
 			medias = req.body.media;
 			for (var i = 0; i < medias.length; i++) {
-				var new_host = 'http://192.168.1.24/insertmedia/' + medias[i];
+				var new_host = 'http://130.245.169.149/insertmedia/' + medias[i];
 				request(new_host, function (err, response) {
 					if (err) {
 						logger.error(err);
 						if (err.code === 'ECONNREFUSED') err = "MS refused connections";
-						return res.json({ status: "ERROR", error: err });
+						//return res.json({ status: "ERROR", error: err });
 					}
 					else
 						logger.info(response);
