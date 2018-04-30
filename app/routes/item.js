@@ -20,7 +20,7 @@ module.exports = function(app, logger, Item, memcached) {
 						else { 
  				
 							//return res.json({ status: "OK", item: item.toClient() });
-							memcached.add(itemID, item, 60, function (err) {
+							memcached.add(itemID, item.toClient(), 60, function (err) {
 								if (err) {
 									logger.error(err);
 								} else {
