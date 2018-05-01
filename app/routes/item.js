@@ -4,11 +4,12 @@ module.exports = function(app, logger, Item, memcached) {
 		memcached.get(itemID, function (err, cached_item) {
 			if (err) {
 				logger.error(err);
-				return res.json({ status: "ERROR", error: err }).end();
+				return res.json({ status: "ERROR", error: err });
 			} else if (cached_item != null) {
 				cached_item.id = itemID;
-				delete cached_item._id;	
-				return res.json({ status: "OK", item: cached_item }).end();
+				//console.log(cached_item);
+				//delete cached_item._id;	
+				return res.json({ status: "OK", item: cached_item });
 			} else {
 				Item.findById(req.params.itemId, function (err, item) {
 					if (err) {
@@ -20,7 +21,7 @@ module.exports = function(app, logger, Item, memcached) {
 						else { 
  				
 							//return res.json({ status: "OK", item: item.toClient() });
-							memcached.add(itemID, item.toClient(), 60, function (err) {
+							memcached.add(itemID, item.toClient(), 3600, function (err) {
 								if (err) {
 									logger.error(err);
 								} else {

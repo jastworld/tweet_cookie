@@ -1,7 +1,9 @@
-module.exports = function(app, logger, Item,verifyToken) {
+module.exports = function(app, logger, Item,verifyToken,memcached) {
 	app.post('/item/:itemId/like', verifyToken, function(req, res) {	
 		var itemID = req.params.itemId;
 		var like = req.body.like;
+		//console.log("Used me")
+		/*
 		if (like == false)
 			like_amt = -1;
 		else
@@ -21,6 +23,42 @@ module.exports = function(app, logger, Item,verifyToken) {
 			} else {
 			    return res.json({ status: "error", error: "you cannot unlike this item"});
 			};
-		});
+		});*/
+		if(like == false){
+			console.log(false)
+			Item.findByIdAndUpdate(itemID,{$inc: {"likes":-1}},function(err,item){
+				if(err){
+					logger.error(err);
+					res.json({status:"error", error: err})
+				}else{
+					item.likes = item.likes-1;
+					console.log(item)
+					res.json({status: "OK"})
+					memcached.set(itemID,item.toClient(),3600,(err,result)=>{
+						if(err)
+							logger.error(err)
+					})
+				}
+			});
+		}else{
+			console.log(true)
+			 Item.findByIdAndUpdate(itemID,{$inc: {"likes":1}},function(err,item){
+				if(err){ 
+                                        logger.error(err);
+                                        res.json({status:"error", error: err})
+                                }else{ 
+                                        res.json({status: "OK"})
+					item.likes =item.likes+1
+					console.log(item);
+					memcached.set(itemID,item.toClient(),3600,(err,result)=>{
+						console.log(err)
+                                                if(err)
+                                                        logger.error(err)
+						console.log(result)
+                                        })
+                                }
+                        })
+		}
+		//return res.json({status: "OK"})
 	});
 };

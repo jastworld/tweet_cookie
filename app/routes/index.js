@@ -9,5 +9,5 @@ module.exports = function(app, time_uuid, asyncLoop, logger, User, Item, mongoos
     	deleteItem(app, logger, Item, mongoose,verifyToken);
 	item(app, logger, Item, memcached);
 	search(app, logger, User, Item,jwt,config);
-	like(app, logger, Item,verifyToken);
+	like(app, logger, Item,verifyToken,memcached);
 };

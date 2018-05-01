@@ -15,7 +15,7 @@ module.exports = function(app, time_uuid, logger, Item, mongoose, memcached,veri
 			parent: req.body.parent,
 			media: req.body.media
 		});
-		memcached.add(ID, item, 60, function (err) {
+		memcached.add(ID, item.toClient(), 3600, function (err) {
 			if (err) {
 				logger.error(err);
 				return res.json({ status: "ERROR", error: err });
