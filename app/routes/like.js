@@ -45,7 +45,7 @@ module.exports = function(app, logger, Item,verifyToken,memcached) {
                                         logger.error(err);
                                         res.json({status:"error", error: err})
                                 }else{ 
-                                        res.json({status: "OK"})
+                                        //res.json({status: "OK"})
 					item.likes =item.likes+1
 					memcached.set(itemID,item.toClient(),3600,(err,result)=>{
                                                 if(err)
