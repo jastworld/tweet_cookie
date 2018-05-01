@@ -25,14 +25,12 @@ module.exports = function(app, logger, Item,verifyToken,memcached) {
 			};
 		});*/
 		if(like == false){
-			console.log(false)
 			Item.findByIdAndUpdate(itemID,{$inc: {"likes":-1}},function(err,item){
 				if(err){
 					logger.error(err);
 					res.json({status:"error", error: err})
 				}else{
 					item.likes = item.likes-1;
-					console.log(item)
 					res.json({status: "OK"})
 					memcached.set(itemID,item.toClient(),3600,(err,result)=>{
 						if(err)
@@ -41,7 +39,6 @@ module.exports = function(app, logger, Item,verifyToken,memcached) {
 				}
 			});
 		}else{
-			console.log(true)
 			 Item.findByIdAndUpdate(itemID,{$inc: {"likes":1}},function(err,item){
 				if(err){ 
                                         logger.error(err);
@@ -49,12 +46,10 @@ module.exports = function(app, logger, Item,verifyToken,memcached) {
                                 }else{ 
                                         res.json({status: "OK"})
 					item.likes =item.likes+1
-					console.log(item);
 					memcached.set(itemID,item.toClient(),3600,(err,result)=>{
 						console.log(err)
                                                 if(err)
                                                         logger.error(err)
-						console.log(result)
                                         })
                                 }
                         })
