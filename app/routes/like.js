@@ -25,27 +25,29 @@ module.exports = function(app, logger, Item,verifyToken,memcached) {
 			};
 		});*/
 		memcached.del(itemID,(err)=>{
-			logger.error(err);
-		})
-		if(like == false){
-			Item.findByIdAndUpdate(itemID,{$inc: {"likes":-1}},function(err,item){
-				if(err){
-					logger.error(err);
-					res.json({status:"error", error: err})
+			if (err) logger.error(err);
+			else {
+				if(like == false){
+					Item.findByIdAndUpdate(itemID,{$inc: {"likes":-1}},function(err,item){
+						if(err){
+							logger.error(err);
+							res.json({status:"error", error: err})
+						}else{
+							res.json({status: "OK"})
+						}
+					});
 				}else{
-					res.json({status: "OK"})
+					 Item.findByIdAndUpdate(itemID,{$inc: {"likes":1}},function(err,item){
+						if(err){ 
+							logger.error(err);
+							res.json({status:"error", error: err})
+						}else{ 
+							res.json({status: "OK"})
+						}
+					})
 				}
-			});
-		}else{
-			 Item.findByIdAndUpdate(itemID,{$inc: {"likes":1}},function(err,item){
-				if(err){ 
-                                        logger.error(err);
-                                        res.json({status:"error", error: err})
-                                }else{ 
-                                        res.json({status: "OK"})
-                                }
-                        })
-		}
-		//return res.json({status: "OK"})
+				//return res.json({status: "OK"})
+			}
+		});
 	});
 };
