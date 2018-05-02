@@ -24,19 +24,16 @@ module.exports = function(app, logger, Item,verifyToken,memcached) {
 			    return res.json({ status: "error", error: "you cannot unlike this item"});
 			};
 		});*/
+		memcached.del(itemID,(err)=>{
+			logger.error(err);
+		})
 		if(like == false){
 			Item.findByIdAndUpdate(itemID,{$inc: {"likes":-1}},function(err,item){
 				if(err){
 					logger.error(err);
 					res.json({status:"error", error: err})
 				}else{
-					item.likes = item.likes-1;
-					//res.json({status: "OK"})
-					memcached.set(itemID,item.toClient(),3600,(err,result)=>{
-						if(err)
-							logger.error(err)
-						else res.json({status: "OK"})
-					})
+					res.json({status: "OK"})
 				}
 			});
 		}else{
@@ -45,13 +42,7 @@ module.exports = function(app, logger, Item,verifyToken,memcached) {
                                         logger.error(err);
                                         res.json({status:"error", error: err})
                                 }else{ 
-                                        //res.json({status: "OK"})
-					item.likes =item.likes+1
-					memcached.set(itemID,item.toClient(),3600,(err,result)=>{
-                                                if(err)
-                                                        logger.error(err)
-						else res.json({status: "OK"})
-                                        })
+                                        res.json({status: "OK"})
                                 }
                         })
 		}
